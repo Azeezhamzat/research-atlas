@@ -14,6 +14,8 @@
 - Corrected PDF.js standard-font paths on Windows by normalising directory separators and enforcing the required trailing slash.
 - Corrected Debian and RPM maker configuration so both installers target the packaged `research-atlas` executable on x64 and ARM64.
 - Pinned GitHub Actions to immutable commits for the current supported checkout, Node setup, and artifact upload releases.
+- Split two large CSV export expressions so Swift compilers on clean Apple-silicon runners can type-check them deterministically.
+- Made unsigned macOS DMG generation atomic and resilient to transient `hdiutil` resource contention.
 
 ## 1.10.0 — 2026-10-23
 

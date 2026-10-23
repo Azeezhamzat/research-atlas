@@ -269,11 +269,21 @@ public enum ResearchExporter {
 
     private static func literatureCSV(_ items: [LiteratureItem]) -> String {
         var rows = [["id", "title", "authors", "year", "doi", "citation_key", "tags", "source", "source_availability", "zotero_server_id", "zotero_library_id", "zotero_library_name", "zotero_key", "zotero_version", "pdf_path", "pdf_byte_count", "pdf_sha256", "pdf_last_verified_at"]]
-        rows += items.map {
-            [$0.id.uuidString, $0.title, $0.authors, $0.year.map(String.init) ?? "", $0.doi ?? "", $0.citationKey ?? "",
-             $0.tags.joined(separator: "; "), $0.source.rawValue, $0.sourceAvailability.rawValue, $0.zoteroServerID ?? "",
-             $0.zoteroLibraryID ?? "", $0.zoteroLibraryName ?? "", $0.zoteroKey ?? "", $0.zoteroVersion.map(String.init) ?? "", $0.pdfPath ?? "", $0.pdfByteCount.map(String.init) ?? "",
-             $0.pdfContentHash ?? "", $0.pdfLastVerifiedAt.map(timestamp) ?? ""]
+        for item in items {
+            let publication = [
+                item.id.uuidString, item.title, item.authors, item.year.map(String.init) ?? "",
+                item.doi ?? "", item.citationKey ?? "", item.tags.joined(separator: "; "),
+                item.source.rawValue, item.sourceAvailability.rawValue
+            ]
+            let zotero = [
+                item.zoteroServerID ?? "", item.zoteroLibraryID ?? "", item.zoteroLibraryName ?? "",
+                item.zoteroKey ?? "", item.zoteroVersion.map(String.init) ?? ""
+            ]
+            let localFile = [
+                item.pdfPath ?? "", item.pdfByteCount.map(String.init) ?? "", item.pdfContentHash ?? "",
+                item.pdfLastVerifiedAt.map(timestamp) ?? ""
+            ]
+            rows.append(publication + zotero + localFile)
         }
         return csv(rows)
     }
@@ -492,13 +502,22 @@ public enum ResearchExporter {
 
     private static func aiAnalysesCSV(_ items: [AIAnalysis]) -> String {
         var rows = [["id", "kind", "provider", "model", "prompt_version", "retrieval_set_id", "target_type", "target_id", "user_query", "response_text", "structured_response_json", "status", "transmitted_passage_count", "transmitted_character_count", "input_tokens", "output_tokens", "error_message", "created_at", "completed_at"]]
-        rows += items.map {
-            [$0.id.uuidString, $0.kind.rawValue, $0.provider, $0.model, $0.promptVersion,
-             $0.retrievalSetID?.uuidString ?? "", $0.targetType?.rawValue ?? "", $0.targetID?.uuidString ?? "",
-             $0.userQuery, $0.responseText, $0.structuredResponseJSON,
-             $0.status.rawValue, String($0.transmittedPassageCount), String($0.transmittedCharacterCount),
-             $0.inputTokens.map(String.init) ?? "", $0.outputTokens.map(String.init) ?? "", $0.errorMessage ?? "",
-             timestamp($0.createdAt), $0.completedAt.map(timestamp) ?? ""]
+        for item in items {
+            let identity = [
+                item.id.uuidString, item.kind.rawValue, item.provider, item.model, item.promptVersion,
+                item.retrievalSetID?.uuidString ?? "", item.targetType?.rawValue ?? "",
+                item.targetID?.uuidString ?? ""
+            ]
+            let content = [
+                item.userQuery, item.responseText, item.structuredResponseJSON, item.status.rawValue
+            ]
+            let transmission = [
+                String(item.transmittedPassageCount), String(item.transmittedCharacterCount),
+                item.inputTokens.map(String.init) ?? "", item.outputTokens.map(String.init) ?? "",
+                item.errorMessage ?? ""
+            ]
+            let timing = [timestamp(item.createdAt), item.completedAt.map(timestamp) ?? ""]
+            rows.append(identity + content + transmission + timing)
         }
         return csv(rows)
     }

@@ -18,18 +18,31 @@ const version = JSON.parse(fs.readFileSync(path.resolve('package.json'), 'utf8')
 const outputDirectory = path.join(out, 'make', 'dmg', architecture);
 const output = path.join(outputDirectory, `Research-Atlas-${version}-${architecture}.dmg`);
 const staging = fs.mkdtempSync(path.join(os.tmpdir(), 'research-atlas-dmg-'));
+const temporaryOutput = path.join(os.tmpdir(), `research-atlas-${process.pid}-${architecture}.dmg`);
 
 try {
   fs.mkdirSync(outputDirectory, { recursive: true });
   fs.cpSync(appBundle, path.join(staging, 'Research Atlas.app'), { recursive: true });
   fs.symlinkSync('/Applications', path.join(staging, 'Applications'));
   fs.rmSync(output, { force: true });
-  const result = spawnSync('/usr/bin/hdiutil', [
-    'create', '-volname', 'Research Atlas', '-srcfolder', staging,
-    '-ov', '-format', 'UDZO', output
-  ], { stdio: 'inherit' });
-  if (result.status !== 0) throw new Error(`hdiutil failed with status ${result.status}`);
+  let status = null;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    fs.rmSync(temporaryOutput, { force: true });
+    const result = spawnSync('/usr/bin/hdiutil', [
+      'create', '-volname', 'Research Atlas', '-srcfolder', staging,
+      '-ov', '-format', 'UDZO', temporaryOutput
+    ], { stdio: 'inherit' });
+    status = result.status;
+    if (status === 0) break;
+    if (attempt < 3) {
+      process.stderr.write(`hdiutil attempt ${attempt} failed; retrying with a fresh temporary image.\n`);
+      spawnSync('/bin/sleep', [String(attempt)], { stdio: 'ignore' });
+    }
+  }
+  if (status !== 0) throw new Error(`hdiutil failed after 3 attempts with status ${status}`);
+  fs.renameSync(temporaryOutput, output);
   process.stdout.write(`Created ${output}\n`);
 } finally {
+  fs.rmSync(temporaryOutput, { force: true });
   fs.rmSync(staging, { recursive: true, force: true });
 }
