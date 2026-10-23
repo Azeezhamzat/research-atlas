@@ -1,0 +1,42 @@
+{
+  "name": "research-atlas-desktop",
+  "productName": "Research Atlas",
+  "version": "1.10.0",
+  "description": "A local-first research reasoning workspace for macOS, Windows, and Linux.",
+  "type": "module",
+  "main": "src/main.js",
+  "author": "Research Atlas",
+  "license": "Apache-2.0",
+  "private": true,
+  "engines": {
+    "node": ">=24.15"
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "licenses": "node scripts/generate-license-inventory.js",
+    "prepackage": "npm run licenses",
+    "premake": "npm run licenses",
+    "package": "electron-forge package",
+    "make": "electron-forge make && node scripts/create-dmg.js",
+    "postmake": "node scripts/create-checksums.js",
+    "test": "node --test",
+    "check": "node --check forge.config.js && node --check src/main.js && node --check src/preload.cjs && node --check src/database.js && node --check src/library-indexer.js && node --check src/ai-provider.js && node --check src/renderer/app.js && node --check scripts/create-dmg.js && node --check scripts/create-checksums.js && node --check scripts/create-smoke-workspace.js"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "1.0.1",
+    "pdfjs-dist": "6.4.299"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "8.0.1",
+    "@electron-forge/maker-deb": "8.0.1",
+    "@electron-forge/maker-rpm": "8.0.1",
+    "@electron-forge/maker-squirrel": "8.0.1",
+    "@electron-forge/maker-zip": "8.0.1",
+    "@electron-forge/plugin-fuses": "^8.0.1",
+    "@electron/fuses": "^2.1.3",
+    "electron": "45.0.0"
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.4": true
+  }
+}

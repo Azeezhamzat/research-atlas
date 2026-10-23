@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a reproducible problem in Research Atlas
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve Research Atlas. Please remove private research content, API keys, and personal paths from logs and screenshots before attaching them.
+  - type: input
+    id: version
+    attributes:
+      label: Research Atlas version
+      description: Use the version shown in the app or the release name you installed.
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open …
+        2. Select …
+        3. Observe …
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Relevant diagnostics
+      description: Add sanitised logs or screenshots. Do not include research documents, credentials, or personal paths.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed API keys, private research content, and personal information from this report.
+          required: true
+        - label: I checked that this issue has not already been reported.
+          required: true

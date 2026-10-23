@@ -1,0 +1,57 @@
+{
+  "correctnessChecks" : [
+    "All synthetic literature records were persisted.",
+    "Every benchmark query returned a labelled FTS result.",
+    "Grounded retrieval returned only current, persisted source snapshots.",
+    "Full and filtered library loads retained the expected record count.",
+    "A complete FTS rebuild preserved searchable passage provenance."
+  ],
+  "databaseBytes" : 39784448,
+  "dataset" : "Deterministic synthetic corpus; no personal files or database content",
+  "environment" : {
+    "activeProcessorCount" : 16,
+    "operatingSystem" : "Version 26.6.2 (Build 25G83)",
+    "physicalMemoryBytes" : 51539607552,
+    "processorCount" : 16
+  },
+  "generatedAt" : "2026-10-20T17:44:06Z",
+  "ingestionSeconds" : 115.280204709,
+  "measurements" : [
+    {
+      "maximumMilliseconds" : 48.084416,
+      "medianMilliseconds" : 18.272604,
+      "minimumMilliseconds" : 13.66475,
+      "operation" : "Global FTS search",
+      "p95Milliseconds" : 47.603808,
+      "samples" : 40
+    },
+    {
+      "maximumMilliseconds" : 159.560625,
+      "medianMilliseconds" : 58.680042,
+      "minimumMilliseconds" : 53.871958,
+      "operation" : "Grounded retrieval set creation",
+      "p95Milliseconds" : 156.35478365,
+      "samples" : 40
+    },
+    {
+      "maximumMilliseconds" : 28.929666,
+      "medianMilliseconds" : 26.891021000000002,
+      "minimumMilliseconds" : 25.883667,
+      "operation" : "Filtered literature load",
+      "p95Milliseconds" : 27.609695849999998,
+      "samples" : 40
+    },
+    {
+      "maximumMilliseconds" : 80.851833,
+      "medianMilliseconds" : 77.60275,
+      "minimumMilliseconds" : 76.002791,
+      "operation" : "Complete literature metadata load",
+      "p95Milliseconds" : 79.62057920000001,
+      "samples" : 40
+    }
+  ],
+  "paperCount" : 3000,
+  "passageCount" : 36000,
+  "rebuildSeconds" : 1.0819389590000001,
+  "schemaVersion" : 1
+}

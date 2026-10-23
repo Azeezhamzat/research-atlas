@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; frame-src 'self' atlas-pdf:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Research Atlas</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <aside class="sidebar" aria-label="Research Atlas navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">RA</div>
+        <div><strong>Research Atlas</strong><span>Local-first workspace</span></div>
+      </div>
+      <nav id="navigation"></nav>
+      <div class="privacy-badge"><span class="status-dot"></span><span><strong>Local by default</strong><br>AI sends nothing without review</span></div>
+    </aside>
+    <section class="workspace">
+      <header class="topbar">
+        <div><p id="eyebrow" class="eyebrow">Workspace</p><h1 id="page-title">Research Home</h1></div>
+        <div class="top-actions">
+          <button id="global-search" class="icon-button" title="Global Search (Ctrl/⌘ K)" aria-label="Global Search">⌕</button>
+          <button id="open-ai" class="primary compact">✦ Grounded AI</button>
+          <button id="quick-add" class="icon-button" title="Add PDFs" aria-label="Add PDFs">＋</button>
+        </div>
+      </header>
+      <div id="index-progress" class="progress-banner hidden" role="status"></div>
+      <main id="content" tabindex="-1"></main>
+    </section>
+  </div>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <dialog id="record-dialog" class="modal">
+    <form id="record-form" method="dialog">
+      <header><div><p class="eyebrow">Research record</p><h2 id="record-title">New record</h2></div><button type="button" class="icon-button close-dialog" aria-label="Close">×</button></header>
+      <div id="record-fields" class="form-grid"></div>
+      <footer><button type="button" class="secondary close-dialog">Cancel</button><button type="submit" class="primary">Save record</button></footer>
+    </form>
+  </dialog>
+
+  <dialog id="ai-dialog" class="modal wide">
+    <form id="ai-form" method="dialog">
+      <header><div><p class="eyebrow">Consent-gated analysis</p><h2>Grounded AI</h2></div><button type="button" class="icon-button close-dialog" aria-label="Close">×</button></header>
+      <div class="ai-layout">
+        <section>
+          <label>Research task<textarea id="ai-query" rows="6" placeholder="What should the model examine, compare, or challenge?"></textarea></label>
+          <label>Analysis mode<select id="ai-kind"><option>Assistant</option><option>Bias review</option><option>Argument critique</option><option>Contradiction assessment</option><option>Writing support</option></select></label>
+          <div id="ai-source-picker" class="source-picker"></div>
+        </section>
+        <aside id="ai-preview" class="transmission-preview">
+          <div class="empty-state compact-empty"><span>◎</span><h3>Preview before sending</h3><p>The exact destination, task, and source passages appear here. Nothing is transmitted until you approve.</p></div>
+        </aside>
+      </div>
+      <footer><button type="button" class="secondary close-dialog">Cancel</button><button type="button" id="preview-ai" class="secondary">Preview transmission</button><button type="submit" id="send-ai" class="primary" disabled>Approve and send once</button></footer>
+    </form>
+  </dialog>
+
+  <dialog id="confirm-dialog" class="modal small">
+    <form method="dialog">
+      <header><div><p class="eyebrow">Confirm</p><h2 id="confirm-title">Are you sure?</h2></div></header>
+      <p id="confirm-message"></p>
+      <footer><button value="cancel" class="secondary">Cancel</button><button value="confirm" class="danger">Continue</button></footer>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

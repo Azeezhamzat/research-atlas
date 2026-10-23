@@ -1,0 +1,40 @@
+name: Feature request
+description: Propose an improvement to the research workflow
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: research-need
+    attributes:
+      label: Research need
+      description: What research task or decision is currently difficult?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+      description: Explain the desired behaviour, not only the interface.
+    validations:
+      required: true
+  - type: textarea
+    id: provenance
+    attributes:
+      label: Evidence and provenance implications
+      description: How should the feature preserve sources, uncertainty, auditability, and user control?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Project boundaries
+      options:
+        - label: The proposal keeps the core research workflow usable without a paid AI provider.
+          required: true
+        - label: The proposal does not require uploading private research material by default.
+          required: true

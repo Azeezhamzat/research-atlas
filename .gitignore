@@ -1,0 +1,48 @@
+# macOS and editor state
+.DS_Store
+.AppleDouble
+.LSOverride
+.vscode/
+.idea/
+*.xcuserstate
+xcuserdata/
+
+# Swift and Xcode output
+.build/
+.swiftpm/
+Build/
+DerivedData/
+
+# Local Research Atlas data. These can contain complete private research corpora.
+Backups/
+Exports/
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.db
+*.db-shm
+*.db-wal
+
+# ChatGPT project context is reference-only and is not part of the application source.
+sources/
+AGENTS.md
+
+# Machine-specific performance captures. Keep Benchmarks/README.md tracked.
+Benchmarks/*.json
+!Benchmarks/research-atlas-performance-20261020T174114Z.json
+
+# Private originals retained locally. Public-safe tutorial assets use the -public suffix.
+Support/Tutorial/learning-center-hero.png
+Support/Tutorial/local-folder-library.png
+Support/Tutorial/evidence-provenance.png
+Support/Tutorial/question-coverage-audit.png
+
+# Secrets, local configuration, logs, and model weights
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.log
+*.gguf
+*.safetensors

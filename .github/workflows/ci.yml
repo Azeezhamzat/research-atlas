@@ -1,0 +1,92 @@
+name: Verify Research Atlas
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  native-macos:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: swift --version
+
+      - name: Audit public repository contents
+        run: Scripts/verify-public-repository.sh
+
+      - name: Build all products
+        run: swift build
+
+      - name: Run deterministic checks
+        run: swift run ResearchAtlasChecks
+
+  universal-desktop:
+    name: Universal desktop · ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS Apple silicon
+            os: macos-15
+            artifact: macos-arm64
+          - name: macOS Intel
+            os: macos-15-intel
+            artifact: macos-x64
+          - name: Windows x64
+            os: windows-2025
+            artifact: windows-x64
+          - name: Windows ARM64
+            os: windows-11-arm
+            artifact: windows-arm64
+          - name: Linux x64
+            os: ubuntu-24.04
+            artifact: linux-x64
+          - name: Linux ARM64
+            os: ubuntu-24.04-arm
+            artifact: linux-arm64
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: Desktop
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.0'
+          cache: npm
+          cache-dependency-path: Desktop/package-lock.json
+
+      - name: Install Linux packaging tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y fakeroot rpm
+        working-directory: .
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Check JavaScript
+        run: npm run check
+
+      - name: Run universal-client tests
+        run: npm test
+
+      - name: Build native installer
+        run: npm run make
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-atlas-${{ matrix.artifact }}
+          path: Desktop/out/make/**
+          if-no-files-found: error
