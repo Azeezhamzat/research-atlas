@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
-import { discoverPDFs, extractPdf, sha256File } from '../src/library-indexer.js';
+import { discoverPDFs, extractPdf, normalizeFactoryDirectoryPath, sha256File } from '../src/library-indexer.js';
 
 function minimalPdf(text) {
   const stream = `BT /F1 12 Tf 72 720 Td (${text}) Tj ET`;
@@ -55,4 +55,15 @@ test('PDF.js extracts page text from a real PDF document', async () => {
     assert.match(result.pages[0], /Research Atlas provenance check/);
     assert.equal(result.scanned, false);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('PDF.js factory paths use portable forward slashes and a trailing slash', () => {
+  assert.equal(
+    normalizeFactoryDirectoryPath('C:\\Research Atlas\\node_modules\\pdfjs-dist\\standard_fonts\\'),
+    'C:/Research Atlas/node_modules/pdfjs-dist/standard_fonts/'
+  );
+  assert.equal(
+    normalizeFactoryDirectoryPath('/opt/research-atlas/standard_fonts'),
+    '/opt/research-atlas/standard_fonts/'
+  );
 });

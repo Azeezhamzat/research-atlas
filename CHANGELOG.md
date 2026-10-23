@@ -10,6 +10,10 @@
 - Made performance profiling choose an available macOS SDK instead of assuming one host-specific SDK path.
 - Added security-reporting guidance, contribution privacy rules, and the third-party notice shipped with the bundled Ollama runtime.
 - Added an explicit packaging warning when the locally discovered Ollama runtime resolves inside the Trash, preventing that condition from being mistaken for a distribution-ready dependency.
+- Made the public-repository audit portable to clean macOS runners that provide POSIX `grep` but not ripgrep.
+- Corrected PDF.js standard-font paths on Windows by normalising directory separators and enforcing the required trailing slash.
+- Corrected Debian and RPM maker configuration so both installers target the packaged `research-atlas` executable on x64 and ARM64.
+- Pinned GitHub Actions to immutable commits for the current supported checkout, Node setup, and artifact upload releases.
 
 ## 1.10.0 — 2026-10-23
 

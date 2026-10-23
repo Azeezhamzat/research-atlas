@@ -6,6 +6,11 @@ import { fileURLToPath } from 'node:url';
 
 const ignoredDirectoryExtensions = new Set(['.app', '.bundle', '.framework', '.pkg', '.photoslibrary']);
 
+export function normalizeFactoryDirectoryPath(directoryPath) {
+  const normalized = directoryPath.replaceAll('\\', '/').replace(/\/+$/, '');
+  return `${normalized}/`;
+}
+
 export async function discoverPDFs(rootPath) {
   const root = path.resolve(rootPath);
   const rootStats = await fsp.stat(root);
@@ -45,7 +50,9 @@ export async function extractPdf(filePath) {
     data: bytes,
     disableFontFace: true,
     useSystemFonts: false,
-    standardFontDataUrl: fileURLToPath(new URL('../node_modules/pdfjs-dist/standard_fonts/', import.meta.url))
+    standardFontDataUrl: normalizeFactoryDirectoryPath(
+      fileURLToPath(new URL('../node_modules/pdfjs-dist/standard_fonts/', import.meta.url))
+    )
   });
   const document = await loadingTask.promise;
   const pageCount = document.numPages;

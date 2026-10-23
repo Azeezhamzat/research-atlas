@@ -59,11 +59,22 @@ if (process.platform === 'linux') {
         productName: 'Research Atlas',
         genericName: 'Research workspace',
         categories: ['Office', 'Education', 'Science'],
-        maintainer: 'Research Atlas'
+        maintainer: 'Research Atlas',
+        bin: 'research-atlas'
       }
     }
   });
-  makers.push({ name: '@electron-forge/maker-rpm' });
+  makers.push({
+    name: '@electron-forge/maker-rpm',
+    config: {
+      options: {
+        productName: 'Research Atlas',
+        genericName: 'Research workspace',
+        categories: ['Office', 'Education', 'Science'],
+        bin: 'research-atlas'
+      }
+    }
+  });
   makers.push({ name: '@electron-forge/maker-zip', platforms: ['linux'] });
 }
 

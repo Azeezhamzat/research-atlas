@@ -10,6 +10,16 @@ fail() {
   exit 1
 }
 
+matching_files() {
+  local pattern="$1"
+  shift
+  if command -v rg >/dev/null 2>&1; then
+    rg -l --no-messages -- "${pattern}" "$@"
+  else
+    grep -E -l -- "${pattern}" "$@" 2>/dev/null
+  fi
+}
+
 required_files=(
   "LICENSE"
   "NOTICE"
@@ -78,11 +88,11 @@ done
 
 if (( ${#text_files[@]} > 0 )); then
   secret_pattern='sk-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----'
-  secret_files="$(rg -l --no-messages -- "${secret_pattern}" "${text_files[@]}" || true)"
+  secret_files="$(matching_files "${secret_pattern}" "${text_files[@]}" || true)"
   [[ -z "${secret_files}" ]] || fail "possible credential material found in: ${(j:, :)${(f)secret_files}}"
 
   home_path_pattern='/Users/[[:alnum:]_.-]+/'
-  path_files="$(rg -l --no-messages -- "${home_path_pattern}" "${text_files[@]}" || true)"
+  path_files="$(matching_files "${home_path_pattern}" "${text_files[@]}" || true)"
   [[ -z "${path_files}" ]] || fail "absolute macOS home path found in: ${(j:, :)${(f)path_files}}"
 fi
 
